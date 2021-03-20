@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,    // import * as React from 'react';  >> import React from 'react' 로 가져오겠다.
+    "sourceMap": true,          // 에러 났을 떄 에러 난 위치를 찾아가겠다.
+    "lib": ["ES2020", "DOM"],   // 라이브러리
+    "jsx": "react",             // jsx 를 리액트에 맞춰 사용하겠다.
+    "module": "esnext",         // esnext > 최신 js 모듈을 사용하겠다.
+    "moduleResolution": "Node", 
+    "target": "es5",            // js로 변환 시 , es5 문법을 따라가겠다.
+    "strict": true,             // 타입체킹을 엄격하게 하겠다.
+    "resolveJsonModule": true,  // import json 파일을 사용하는 것을 허용하겠다.
+    "baseUrl": ".",
+    "paths": {
+      "@hooks/*": ["hooks/*"],
+      "@components/*": ["components/*"],
+      "@layouts/*": ["layouts/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"],
+      "@typings/*": ["typings/*"]
+    }
+  }
+}
