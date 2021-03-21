@@ -8,7 +8,7 @@ import fetcher from '@utils/fetcher';
 import { Button, Error, Form, Header, Input, Label, LinkContainer } from '@pages/SignUp/styles';
 
 const LogIn = () => {
-  const { data, error, revalidate } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data, error, revalidate, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -25,9 +25,9 @@ const LogIn = () => {
             withCredentials: true,
           },
         )
-        .then(() => {
-          revalidate();
-          alert('로그인 성공!');
+        .then((response) => {
+          mutate(response.data);
+          // redux-saga에서 me 와 같은 나의 정보가 들은 state의 역할을 SWR에서는 useSWR()이 하게 됨
         })
         .catch((error) => {
           setLogInError(error.response?.data?.statusCode === 401);
@@ -35,6 +35,14 @@ const LogIn = () => {
     },
     [email, password],
   );
+
+  if (data === undefined) {
+    <div>로딩중...</div>;
+  }
+
+  if (data) {
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">
