@@ -76,12 +76,15 @@ const config: webpack.Configuration = {
     historyApiFallback: true, // react router
     port: 3090,
     publicPath: '/dist/',
-    // proxy: {
-    //   '/api/': {
-    //     target: 'http://localhost:3095',
-    //     changeOrigin: true,
-    //   },
-    // },
+    // proxy 설정을 통해 /api/주소를 통해 보내는 명령어는 주소를 3095(서버)로 바꿔서 보내겠다는 설정이다.
+    // 기존에 localhost:3095/api/users 와 같은 axios 전송은 3090 에서 3095로 보낸다는 뜻이지만,
+    // prxoy 설정을 통해 같은 3095번에서 보내는 것으로 설정할 수 있다.
+    proxy: {
+      '/api/': {
+        target: 'http://localhost:3095',
+        changeOrigin: true,
+      },
+    },
   },
 };
 

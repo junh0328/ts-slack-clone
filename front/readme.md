@@ -73,6 +73,10 @@
 
 <hr/>
 
+## 6. downloaded dependencies, axios로 요청 보내기
+
+- axios
+
 ## 꿀팁
 
 ### 👉🏼 package-lock.json??
