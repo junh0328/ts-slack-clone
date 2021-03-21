@@ -49,6 +49,16 @@
 
 <hr/>
 
+## 4. downloaded dependencies, 폴더 구조와 리액트 라우터
+
+-react-router
+-react-router-dom
+
+-@types/react-router
+-@types/react-router-dom
+
+> 리액트 라우터 돔을 활용하여 기본적인 폴더 구조화
+
 ## 꿀팁
 
 ### 👉🏼 package-lock.json??
