@@ -59,6 +59,18 @@
 
 > 리액트 라우터 돔을 활용하여 기본적인 폴더 구조화
 
+<hr/>
+
+## 5. downloaded dependencies, 코드 스플리팅과 이모션
+
+- @emotion/babel-plugin
+- @emotion/react
+- @emotion/styled
+- @loadable/component
+- @types/loadable\_\_component
+
+> loadable 라이브러리르 적용하여 코드스플리팅을 통해 웹팩에서 관리
+
 ## 꿀팁
 
 ### 👉🏼 package-lock.json??
