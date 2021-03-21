@@ -17,6 +17,27 @@
 
 <hr/>
 
+## 2. downloaded dependencies
+
+- @babel/preset-env
+- cross-env
+- css-loader
+
+> dev dependencies
+
+- @babel/core
+- @babel/preset-react
+- @babel/preset-typescript
+- @types/node
+- @types/webpack
+- babel-loader
+- webpack
+- webpack-cli
+
+<hr/>
+
+<p>babel과 webpack 설정을 위한 세팅</p>
+
 ## 꿀팁
 
 ### 👉🏼 package-lock.json??
