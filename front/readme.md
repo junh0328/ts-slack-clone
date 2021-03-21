@@ -71,6 +71,8 @@
 
 > loadable 라이브러리르 적용하여 코드스플리팅을 통해 웹팩에서 관리
 
+<hr/>
+
 ## 꿀팁
 
 ### 👉🏼 package-lock.json??
@@ -80,3 +82,38 @@
 ### 라이브러리 다운 시 -D, 와 일반의 차이
 
 <p>우리가 만든 프로젝트 파일을 라이브러리로 만들어 배포할 때는 -D (개발 환경에서만 실행)으로 구분해주는 것이 좋지만, 실무에서 서비스할 때는 너무 엄격하게 구분할 필요는 없습니다.</p>
+
+### custom hooks 만들기
+
+<p>기존의 useInput(useState와 onChange를 관리하기 위헤 만든 커스텀 훅)에 타입을 대입만 대입하면 다음과 같다. 타입스크립트는 기본적으로 파라미터에 대한 타입과 반환값에 대한 타입을 정리해 줘야 하므로 해당 타입을 <T>, 즉 제네릭으로 설정하여 어떤 타입이 들어오더라도 <T> 자리에 있는 타입이 같은 타입의 결과를 반환할 수 있도록 만들어 주었다.</p>
+
+```ts
+import { useState, useCallback, Dispatch, SetStateAction } from 'react';
+
+const useInput = <T = any>(initialValue: T): [T, (e: any) => void, Dispatch<SetStateAction<T>>] => {
+  // initialValue로 string 값이 온다면 generics가 string으로 변환됨
+  const [value, setValue] = useState(initialValue);
+  const handler = useCallback((e) => {
+    setValue(e.target.value);
+  }, []);
+  return [value, handler, setValue];
+  // (return 값, 즉 반환 값에 대한 타입스크립트의 타이핑 처리라고 보면 된다.)
+  // [T, (e: any) => void, Dispatch<SetStateAction<T>>]
+};
+
+export default useInput;
+```
+
+<p>만일 반환 값을 나타내는 타입 부분이 너무 길다면 타입선언을 통해 따로 빼줄 수 있다.</p>
+
+```ts
+import { useState, useCallback, Dispatch, SetStateAction } from 'react';
+
+type ReturnTypes<T = any> = [T, (e: any) => void, Dispatch<SetStateAction<T>>];
+
+const useInput = <T = any>(initialValue: T): ReturnTypes<T> => {    // return 되는 값의 타입선언을 위로 따로 빼주어 해당 명(ReturnTypes)을 바로 사용했다
+ ...
+ return [value, handler, setValue];
+}
+
+```
