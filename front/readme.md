@@ -77,6 +77,14 @@
 
 - axios
 
+## 7. downloaded dependencies, swr 사용하여 쿠키 공유하기
+
+- swr
+
+> <a href="https://github.com/gregrickaby/swr-examples" target="_blank">SWR 깃허브 살펴보기</a>
+
+<p>redux-saga, redux-thunk, context-api 등 비동기를 처리해주는 다양한 라이브러리가 있지만, 이번에는 SWR을 사용했습니다. 기존에 사용했던 리덕스 사가는 액션에 의해 업데이트 된 상태 state를 계속 가지고 있으므로 그 상태가 유지됐습니다. 하지만, SWR에서는 그러한 기능을 자동적으로 해주지 않기 때문에 fetcher라는 모듈을 만들어, 백엔드에서 지속적으로 로그인 상태를 유지할 수 있도록 만들었습니다.</p>
+
 ## 꿀팁
 
 ### 👉🏼 package-lock.json??

@@ -2,10 +2,13 @@ import useInput from '@hooks/useInput';
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 import { Button, Error, Form, Header, Input, Label, LinkContainer } from '@pages/SignUp/styles';
 
 const LogIn = () => {
+  const { data, error, revalidate } = useSWR('http://localhost:3095/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -16,13 +19,14 @@ const LogIn = () => {
       setLogInError(false);
       axios
         .post(
-          '/api/users/login',
+          'http://localhost:3095/api/users/login',
           { email, password },
           {
             withCredentials: true,
           },
         )
         .then(() => {
+          revalidate();
           alert('로그인 성공!');
         })
         .catch((error) => {
