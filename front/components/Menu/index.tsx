@@ -1,5 +1,5 @@
-import { CreateMenu, CloseModalButton } from '@components/Menu/styles';
-import React, { CSSProperties, FC, PropsWithChildren, useCallback } from 'react';
+import React, { CSSProperties, FC, useCallback } from 'react';
+import { CloseModalButton, CreateMenu } from '@components/Menu/styles';
 
 interface Props {
   show: boolean;
@@ -8,9 +8,9 @@ interface Props {
   closeButton?: boolean;
 }
 
-const Menu: FC<PropsWithChildren<Props>> = ({ closeButton, style, show, children, onCloseModal }) => {
+const Menu: FC<Props> = ({ children, style, show, onCloseModal, closeButton }) => {
   const stopPropagation = useCallback((e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // 부모 태그인 <CreatMenu> 로의 이벤트 버블링을 막아주기 위한 함수
   }, []);
 
   if (!show) {
@@ -18,7 +18,7 @@ const Menu: FC<PropsWithChildren<Props>> = ({ closeButton, style, show, children
   }
   return (
     <CreateMenu onClick={onCloseModal}>
-      <div onClick={stopPropagation} style={style}>
+      <div style={style} onClick={stopPropagation}>
         {closeButton && <CloseModalButton onClick={onCloseModal}>&times;</CloseModalButton>}
         {children}
       </div>
