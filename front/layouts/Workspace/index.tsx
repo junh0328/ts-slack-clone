@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import axios from 'axios';
@@ -10,13 +10,16 @@ import {
   Channels,
   Chats,
   Header,
+  LogOutButton,
   MenuScroll,
   ProfileImg,
+  ProfileModal,
   RightMenu,
   WorkspaceName,
   Workspaces,
   WorkspaceWrapper,
 } from '@layouts/Workspace/styles';
+import Menu from '@components/Menu';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -25,6 +28,8 @@ const Workspace: FC = ({ children }) => {
   const { data, error, revalidate, mutate } = useSWR('http://localhost:3095/api/users', fetcher, {
     dedupingInterval: 2000,
   });
+
+  const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수
 
   const onLogout = useCallback(() => {
     axios
@@ -37,6 +42,11 @@ const Workspace: FC = ({ children }) => {
       });
   }, []);
 
+  const onClickUserProfile = useCallback(() => {
+    // 토글함수
+    setShowUserMenu((prev) => !prev);
+  }, []);
+
   if (!data) {
     return <Redirect to="/login" />;
   }
@@ -44,11 +54,23 @@ const Workspace: FC = ({ children }) => {
     <div>
       <Header>
         <RightMenu>
-          <span>test</span>
-          <ProfileImg src={gravatar.url(data.email, { s: '28px', d: 'retro' })} alt={data.email} />
+          <span onClick={onClickUserProfile}>
+            <ProfileImg src={gravatar.url(data.email, { s: '28px', d: 'retro' })} alt={data.nickname} />
+          </span>
+          {showUserMenu && (
+            <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
+              <ProfileModal>
+                <img src={gravatar.url(data.email, { s: '36px', d: 'retro' })} alt={data.nickname} />
+                <div>
+                  <span id="profile-name">{data.nickname}</span>
+                  <span id="profile-active">Active</span>
+                </div>
+              </ProfileModal>
+              <LogOutButton onClick={onLogout}>로그아웃</LogOutButton>
+            </Menu>
+          )}
         </RightMenu>
       </Header>
-      <button onClick={onLogout}>로그아웃</button>
       <WorkspaceWrapper>
         <Workspaces>test</Workspaces>
         <Channels>
