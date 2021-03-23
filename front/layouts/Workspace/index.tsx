@@ -3,8 +3,10 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import axios from 'axios';
 import { Redirect, Route, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
 import gravatar from 'gravatar';
-import loadable from '@loadable/component';
+
+import { toast } from 'react-toastify';
 
 import {
   AddButton,
@@ -25,10 +27,10 @@ import { Label, Input, Button } from '@pages/SignUp/styles';
 
 import Menu from '@components/Menu';
 import Modal from '@components/Modal';
-import { Link } from 'react-router-dom';
-import { IUser } from '@typings/db';
 import useInput from '@hooks/useInput';
-import { toast } from 'react-toastify';
+import loadable from '@loadable/component';
+
+import { IUser } from '@typings/db';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -42,7 +44,7 @@ const Workspace: FC = ({ children }) => {
     },
   );
 
-  const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수
+  const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수 상태값
   const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
@@ -108,7 +110,7 @@ const Workspace: FC = ({ children }) => {
     <div>
       <Header>
         <RightMenu>
-          <span onClick={onClickUserProfile}>
+          <span onClick={onClickUserProfile} style={{ cursor: 'pointer' }}>
             <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.nickname} />
           </span>
           {showUserMenu && (
@@ -147,19 +149,21 @@ const Workspace: FC = ({ children }) => {
           </Switch>
         </Chats>
       </WorkspaceWrapper>
-      <Modal show={ShowCreateWorkspaceModal} onCloseModal={onCloseModal}>
-        <form onSubmit={onCreateWorkspace}>
-          <Label id="workspace-label">
-            <span>워크스페이스 이름</span>
-            <Input id="workspace" value={newWorkspace} onChange={onChangeNewWorkspace}></Input>
-          </Label>
-          <Label id="workspace-url-label">
-            <span>워크스페이스 url</span>
-            <Input id="workspace" value={newUrl} onChange={onChangeNewUrl}></Input>
-          </Label>
-          <Button type="submit">생성하기</Button>
-        </form>
-      </Modal>
+      {ShowCreateWorkspaceModal && (
+        <Modal show={ShowCreateWorkspaceModal} onCloseModal={onCloseModal}>
+          <form onSubmit={onCreateWorkspace}>
+            <Label id="workspace-label">
+              <span>워크스페이스 이름</span>
+              <Input id="workspace" value={newWorkspace} onChange={onChangeNewWorkspace}></Input>
+            </Label>
+            <Label id="workspace-url-label">
+              <span>워크스페이스 url</span>
+              <Input id="workspace" value={newUrl} onChange={onChangeNewUrl}></Input>
+            </Label>
+            <Button type="submit">생성하기</Button>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };
