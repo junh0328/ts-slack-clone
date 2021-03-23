@@ -19,6 +19,7 @@ import {
   ProfileModal,
   RightMenu,
   WorkspaceButton,
+  WorkspaceModal,
   WorkspaceName,
   Workspaces,
   WorkspaceWrapper,
@@ -31,11 +32,12 @@ import useInput from '@hooks/useInput';
 import loadable from '@loadable/component';
 
 import { IUser } from '@typings/db';
+import CreateChannelModal from '@components/CreateChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
-const Workspace: FC = ({ children }) => {
+const Workspace: FC = ({}) => {
   const { data: userData, error, revalidate, mutate } = useSWR<IUser | false>(
     'http://localhost:3095/api/users',
     fetcher,
@@ -46,6 +48,8 @@ const Workspace: FC = ({ children }) => {
 
   const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수 상태값
   const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
+  const [ShowCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [ShowWorkspaceModal, setShowWorkspaceModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
@@ -58,6 +62,15 @@ const Workspace: FC = ({ children }) => {
         mutate(false, false);
         // redux-saga에서 me 와 같은 나의 정보가 들은 state의 역할을 SWR에서는 useSWR()이 하게 됨
       });
+  }, []);
+
+  const toggleWorkspaceModal = useCallback(() => {
+    // 토글함수
+    setShowWorkspaceModal((prev) => !prev);
+  }, []);
+
+  const onClickAddChannel = useCallback(() => {
+    setShowCreateChannelModal((prev) => !prev);
   }, []);
 
   const onClickUserProfile = useCallback(() => {
@@ -101,6 +114,7 @@ const Workspace: FC = ({ children }) => {
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
+    setShowCreateChannelModal(false);
   }, []);
 
   if (!userData) {
@@ -139,8 +153,17 @@ const Workspace: FC = ({ children }) => {
           <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
         </Workspaces>
         <Channels>
-          <WorkspaceName>Sleact</WorkspaceName>
-          <MenuScroll>menu scroll</MenuScroll>
+          <WorkspaceName onClick={toggleWorkspaceModal}>Sleact</WorkspaceName>
+          <MenuScroll>
+            <Menu show={ShowWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
+              <WorkspaceModal>
+                <h2>Sleact</h2>
+                {/* <button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button> */}
+                <button onClick={onClickAddChannel}>채널 만들기</button>
+                <button onClick={onLogout}>로그아웃</button>
+              </WorkspaceModal>
+            </Menu>
+          </MenuScroll>
         </Channels>
         <Chats>
           <Switch>
@@ -164,6 +187,7 @@ const Workspace: FC = ({ children }) => {
           </form>
         </Modal>
       )}
+      <CreateChannelModal show={ShowCreateChannelModal} onCloseModal={onCloseModal} />
     </div>
   );
 };
