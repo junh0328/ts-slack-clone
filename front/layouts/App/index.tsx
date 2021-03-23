@@ -12,7 +12,8 @@ const App = () => {
       <Redirect exact path="/" to="/login" />
       <Route path="/login" component={LogIn} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/workspace" component={Workspace} />
+      <Route path="/workspace/:workspace" component={Workspace} />
+      {/* workspace/sleact || workspace/text || ... , 라우트 파라미터 역할로 바꿔줌 */}
     </Switch>
   );
 };
