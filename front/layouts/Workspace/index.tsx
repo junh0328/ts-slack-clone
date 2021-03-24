@@ -90,11 +90,11 @@ const Workspace: FC = ({}) => {
   }, []);
 
   const onClickAddChannel = useCallback(() => {
-    setShowCreateChannelModal((prev) => !prev);
+    setShowCreateChannelModal(true);
   }, []);
 
   const onClickInviteWorkspace = useCallback(() => {
-    setShowInviteChannelModal((prev) => !prev);
+    setShowInviteChannelModal(true);
   }, []);
 
   const onClickUserProfile = useCallback(() => {
