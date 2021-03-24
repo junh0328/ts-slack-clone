@@ -33,6 +33,8 @@ import loadable from '@loadable/component';
 
 import { IChannel, IUser } from '@typings/db';
 import CreateChannelModal from '@components/CreateChannelModal';
+import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
+import InviteChannelModal from '@components/InviteChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -55,8 +57,10 @@ const Workspace: FC = ({}) => {
 
   const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수 상태값
   const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
-  const [ShowCreateChannelModal, setShowCreateChannelModal] = useState(false);
-  const [ShowWorkspaceModal, setShowWorkspaceModal] = useState(false);
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
+  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
+  const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
@@ -78,6 +82,10 @@ const Workspace: FC = ({}) => {
 
   const onClickAddChannel = useCallback(() => {
     setShowCreateChannelModal((prev) => !prev);
+  }, []);
+
+  const onClickInviteWorkspace = useCallback(() => {
+    setShowInviteChannelModal((prev) => !prev);
   }, []);
 
   const onClickUserProfile = useCallback(() => {
@@ -122,6 +130,8 @@ const Workspace: FC = ({}) => {
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
     setShowCreateChannelModal(false);
+    setShowInviteWorkspaceModal(false);
+    setShowInviteChannelModal(false);
   }, []);
 
   if (!userData) {
@@ -162,10 +172,10 @@ const Workspace: FC = ({}) => {
         <Channels>
           <WorkspaceName onClick={toggleWorkspaceModal}>Sleact</WorkspaceName>
           <MenuScroll>
-            <Menu show={ShowWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
+            <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
               <WorkspaceModal>
                 <h2>Sleact</h2>
-                {/* <button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button> */}
+                <button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button>
                 <button onClick={onClickAddChannel}>채널 만들기</button>
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
@@ -198,9 +208,19 @@ const Workspace: FC = ({}) => {
         </Modal>
       )}
       <CreateChannelModal
-        show={ShowCreateChannelModal}
+        show={showCreateChannelModal}
         onCloseModal={onCloseModal}
         setShowCreateChannelModal={setShowCreateChannelModal}
+      />
+      <InviteWorkspaceModal
+        show={showInviteWorkspaceModal}
+        onCloseModal={onCloseModal}
+        setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
+      />
+      <InviteChannelModal
+        show={showInviteChannelModal}
+        onCloseModal={onCloseModal}
+        setShowInviteChannelModal={setShowInviteChannelModal}
       />
     </div>
   );
