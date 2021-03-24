@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import axios from 'axios';
-import { Redirect, Route, Switch } from 'react-router';
+import { Redirect, Route, Switch, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import gravatar from 'gravatar';
 
@@ -31,19 +31,26 @@ import Modal from '@components/Modal';
 import useInput from '@hooks/useInput';
 import loadable from '@loadable/component';
 
-import { IUser } from '@typings/db';
+import { IChannel, IUser } from '@typings/db';
 import CreateChannelModal from '@components/CreateChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace: FC = ({}) => {
+  const { workspace } = useParams<{ workspace: string }>();
+
   const { data: userData, error, revalidate, mutate } = useSWR<IUser | false>(
     'http://localhost:3095/api/users',
     fetcher,
     {
       dedupingInterval: 2000,
     },
+  );
+
+  const { data: channelData } = useSWR<IChannel[]>(
+    userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
+    fetcher,
   );
 
   const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수 상태값
@@ -163,6 +170,9 @@ const Workspace: FC = ({}) => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
+            {channelData?.map((v) => (
+              <div>{v.name}</div>
+            ))}
           </MenuScroll>
         </Channels>
         <Chats>
@@ -187,7 +197,11 @@ const Workspace: FC = ({}) => {
           </form>
         </Modal>
       )}
-      <CreateChannelModal show={ShowCreateChannelModal} onCloseModal={onCloseModal} />
+      <CreateChannelModal
+        show={ShowCreateChannelModal}
+        onCloseModal={onCloseModal}
+        setShowCreateChannelModal={setShowCreateChannelModal}
+      />
     </div>
   );
 };
