@@ -42,6 +42,7 @@ const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 const Workspace: FC = ({}) => {
   const { workspace } = useParams<{ workspace: string }>();
 
+  // 로그인한 사용자 데이터 가져오기
   const { data: userData, error, revalidate, mutate } = useSWR<IUser | false>(
     'http://localhost:3095/api/users',
     fetcher,
@@ -49,9 +50,15 @@ const Workspace: FC = ({}) => {
       dedupingInterval: 2000,
     },
   );
-
+  // 채널 데이터 가져오기
   const { data: channelData } = useSWR<IChannel[]>(
     userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
+    fetcher,
+  );
+
+  // 워크스페이스에 있는 멤버 가져오기
+  const { data: memberData } = useSWR<IUser[]>(
+    userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null,
     fetcher,
   );
 
