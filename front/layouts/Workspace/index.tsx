@@ -38,7 +38,6 @@ import InviteChannelModal from '@components/InviteChannelModal';
 import ChannelList from '@components/ChannelList';
 import DMList from '@components/DMList';
 import useSocket from '@hooks/useSocket';
-import { disconnect } from 'node:process';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -74,7 +73,7 @@ const Workspace: FC = ({}) => {
     fetcher,
   );
 
-  const [socket, discconect] = useSocket(workspace);
+  const [socket, disconnect] = useSocket(workspace);
 
   // 연결 조건
   useEffect(() => {
@@ -86,7 +85,7 @@ const Workspace: FC = ({}) => {
   // 연결 해제 조건 (워크 스페이스가 변경될 때 연결 해제)
   useEffect(() => {
     return () => {
-      discconect();
+      disconnect();
     };
   }, [workspace, disconnect]);
 

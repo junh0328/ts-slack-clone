@@ -1,29 +1,26 @@
 import io from 'socket.io-client';
 import { useCallback } from 'react';
-// import axios from 'axios';
 
-export const backUrl = `http://localhost:3095`;
-// axios.get(`${backUrl}/api/users`);
+const backUrl = 'http://localhost:3095';
 
 const sockets: { [key: string]: SocketIOClient.Socket } = {};
 // workspace에 들어오는 값이 다양하므로 key 라고 지정해줌
-
 const useSocket = (workspace?: string): [SocketIOClient.Socket | undefined, () => void] => {
+  console.log('rerender', workspace);
   const disconnect = useCallback(() => {
     if (workspace) {
       sockets[workspace].disconnect();
       delete sockets[workspace];
     }
-  }, []);
-
+  }, [workspace]);
   if (!workspace) {
     return [undefined, disconnect];
   }
-  sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`, {
-    transports: ['websocket'],
-  });
-
-  sockets[workspace].emit('hello', 'world');
+  if (!sockets[workspace]) {
+    sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`, {
+      transports: ['websocket'],
+    });
+  }
 
   return [sockets[workspace], disconnect];
 };
