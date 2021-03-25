@@ -1,13 +1,19 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react';
-import { ChatArea, Form, MentionsTextarea, SendButton, Toolbox } from './styles';
+import { ChatArea, EachMention, Form, MentionsTextarea, SendButton, Toolbox } from '@components/ChatBox/styles';
+import { IUser } from '@typings/db';
+import fetcher from '@utils/fetcher';
+import React, { useCallback, useEffect, useRef, FC } from 'react';
 import autosize from 'autosize';
+import { Mention, SuggestionDataItem } from 'react-mentions';
+import { useParams } from 'react-router';
+import useSWR from 'swr';
+import gravatar from 'gravatar';
+
 interface Props {
   chat: string;
   onSubmitForm: (e: any) => void;
   onChangeChat: (e: any) => void;
   placeholder?: string;
 }
-
 const ChatBox: FC<Props> = ({ chat, onSubmitForm, onChangeChat, placeholder }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -35,7 +41,7 @@ const ChatBox: FC<Props> = ({ chat, onSubmitForm, onChangeChat, placeholder }) =
           id="editor-chat"
           value={chat}
           onChange={onChangeChat}
-          onKeyDown={onKeydownChat}
+          onKeyPress={onKeydownChat}
           placeholder={placeholder}
           ref={textareaRef}
         />

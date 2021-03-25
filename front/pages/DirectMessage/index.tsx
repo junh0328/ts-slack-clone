@@ -22,22 +22,34 @@ const DirectMessage = () => {
     fetcher,
   );
 
-  const onSubmitForm = useCallback((e) => {
-    e.preventDefault();
-    if (chat?.trim()) {
-      axios
-        .post(`http://localhost:3095/api/workspaces/${workspace}/dms/${id}/chat`, {
-          content: chat,
-        })
-        .then(() => {
-          revalidate();
-          setChat('');
-        })
-        .catch((error) => {
-          console.dir(error);
-        });
-    }
-  }, []);
+  const onSubmitForm = useCallback(
+    (e) => {
+      e.preventDefault();
+      console.log(chat);
+      if (chat?.trim()) {
+        axios
+          .post(
+            `http://localhost:3095/api/workspaces/${workspace}/dms/${id}/chats`,
+            {
+              content: chat,
+            },
+            {
+              withCredentials: true,
+            },
+          )
+          .then(() => {
+            revalidate();
+            setChat('');
+          })
+          .catch((error) => {
+            console.dir(error);
+          });
+      } else if (!chat) {
+        alert('입력하신 chat이 제대로 전달되지 않았습니다..');
+      }
+    },
+    [chat],
+  );
 
   if (!userData || !myData) {
     return <div>로딩중 ...</div>;
