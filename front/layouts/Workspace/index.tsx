@@ -82,7 +82,7 @@ const Workspace: FC = ({}) => {
         mutate(false, false);
         // redux-saga에서 me 와 같은 나의 정보가 들은 state의 역할을 SWR에서는 useSWR()이 하게 됨
       });
-  }, []);
+  }, [mutate]);
 
   const toggleWorkspaceModal = useCallback(() => {
     // 토글함수
