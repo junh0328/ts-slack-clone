@@ -78,7 +78,8 @@ const Workspace: FC = ({}) => {
   // 연결 조건
   useEffect(() => {
     if (channelData && userData && socket) {
-      socket.emit('login', { id: userData.id, Channels: channelData.map((v) => v.id) });
+      console.log(socket);
+      socket.emit('login', { id: userData.id, channels: channelData.map((v) => v.id) });
     }
   }, [socket, channelData, userData]);
 
