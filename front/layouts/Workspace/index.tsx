@@ -38,6 +38,7 @@ import InviteChannelModal from '@components/InviteChannelModal';
 import ChannelList from '@components/ChannelList';
 import DMList from '@components/DMList';
 import useSocket from '@hooks/useSocket';
+import { disconnect } from 'node:process';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -75,7 +76,19 @@ const Workspace: FC = ({}) => {
 
   const [socket, discconect] = useSocket(workspace);
 
-  useEffect(() => {}, []);
+  // 연결 조건
+  useEffect(() => {
+    if (channelData && userData && socket) {
+      socket.emit('login', { id: userData.id, Channels: channelData.map((v) => v.id) });
+    }
+  }, [socket, channelData, userData]);
+
+  // 연결 해제 조건 (워크 스페이스가 변경될 때 연결 해제)
+  useEffect(() => {
+    return () => {
+      discconect();
+    };
+  }, [workspace, disconnect]);
 
   const onLogout = useCallback(() => {
     axios
