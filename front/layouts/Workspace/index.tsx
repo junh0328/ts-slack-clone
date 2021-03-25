@@ -43,6 +43,14 @@ const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace: FC = ({}) => {
   const { workspace } = useParams<{ workspace: string }>();
+  const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수 상태값
+  const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
+  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
+  const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
+  const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
+  const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
   // 로그인한 사용자 데이터 가져오기
   const { data: userData, error, revalidate, mutate } = useSWR<IUser | false>(
@@ -63,15 +71,6 @@ const Workspace: FC = ({}) => {
     userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null,
     fetcher,
   );
-
-  const [showUserMenu, setShowUserMenu] = useState(false); // 토글 함수 상태값
-  const [ShowCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
-  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
-  const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
-  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
-  const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
-  const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
-  const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
   const onLogout = useCallback(() => {
     axios
