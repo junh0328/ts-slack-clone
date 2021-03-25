@@ -49,7 +49,7 @@ const DirectMessage = () => {
         <span>{userData.nickname}</span>
       </Header>
       <ChatList />
-      <ChatBox chat={chat} onSubmitForm={onSubmitForm} onChangeChat={onChangeChat} />
+      <ChatBox chat={chat} onChangeChat={onChangeChat} onSubmitForm={onSubmitForm} />
     </Container>
   );
 };

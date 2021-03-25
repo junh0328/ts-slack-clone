@@ -217,3 +217,5 @@ if (!show) {
 ```
 
 <a href="https://programmingsummaries.tistory.com/313" target="_blank">e.stopPropagation() 함수 알아보기</a>
+
+### 소켓 io 사용하여 서버와 비동기 통신 이어가기
