@@ -10,7 +10,7 @@ import useSWR from 'swr';
 const ChannelList: FC = () => {
   const { workspace } = useParams<{ workspace?: string }>();
   // const [socket] = useSocket(workspace);
-  const { data: userData, error, revalidate, mutate } = useSWR<IUser>('/api/users', fetcher, {
+  const { data: userData, error, revalidate, mutate } = useSWR<IUser>('http://localhost:3095/api/users', fetcher, {
     dedupingInterval: 2000, // 2초
   });
   const { data: channelData } = useSWR<IChannel[]>(
