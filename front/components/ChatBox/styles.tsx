@@ -71,6 +71,7 @@ export const EachMention = styled.button<{ focus: boolean }>`
   color: rgb(28, 29, 28);
   width: 100%;
   & img {
+    // & : nested selector
     margin-right: 5px;
   }
 
