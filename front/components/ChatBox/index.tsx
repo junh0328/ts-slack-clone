@@ -3,7 +3,6 @@ import { IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import React, { useCallback, useEffect, useRef, FC } from 'react';
 import autosize from 'autosize';
-import { Mention, SuggestionDataItem } from 'react-mentions';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import gravatar from 'gravatar';

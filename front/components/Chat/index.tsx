@@ -2,6 +2,11 @@ import { IDM } from '@typings/db';
 import React, { FC } from 'react';
 import { ChatWrapper } from './styles';
 import gravatar from 'gravatar';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import dayjs from 'dayjs';
+
+dayjs.locale('ko');
+dayjs.extend(advancedFormat);
 
 interface Props {
   data: IDM;
@@ -17,7 +22,7 @@ const Chat: FC<Props> = ({ data }) => {
       <div className="chat-text">
         <div className="chat-user">
           <b>{user.nickname}</b>
-          <span>{data.createdAt}</span>
+          <span>{dayjs(data.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
         </div>
         <p>{data.content}</p>
       </div>

@@ -83,7 +83,7 @@ const Workspace: FC = ({}) => {
     }
   }, [socket, channelData, userData]);
 
-  // 연결 해제 조건 (워크 스페이스가 변경될 때 연결 해제)
+  // 연결 해제 조건 (워크 스페이스가 변경될 때 연결 해제) / 외부조건 disconnect 실행시 해당 useEffect() 실행
   useEffect(() => {
     return () => {
       disconnect();
