@@ -219,3 +219,7 @@ if (!show) {
 <a href="https://programmingsummaries.tistory.com/313" target="_blank">e.stopPropagation() 함수 알아보기</a>
 
 ### 소켓 io 사용하여 서버와 비동기 통신 이어가기
+
+### @types/ 라이브러리는 언제 install 하나요?
+
+<p>typescript 환경에서 기존 npm에서 제공하는 라이브러리들을 사용할 때, 추가적으로 타입을 위해 설치해야할 때가 있습니다. npm 사이트에서 해당 라이브러리를 검색하여 하나하나 찾아봐도 좋지만, 일단 기존의 방식대로 import하고, 오류나 에러가 감지될 때 해당 에러에 명령대로 npm i --save-dev @types/ ... 를 해주셔도 괜찮습니다.</p>

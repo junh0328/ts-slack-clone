@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 // import { MentionsInput } from 'react-mentions';
+import { MentionsInput } from 'react-mentions';
 
 export const ChatArea = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ export const Form = styled.form`
   border: 1px solid rgb(29, 28, 29);
 `;
 
-export const MentionsTextarea = styled.textarea`
+export const MentionsTextarea = styled(MentionsInput)`
   font-family: Slack-Lato, appleLogo, sans-serif;
   font-size: 15px;
   padding: 8px 9px;
@@ -72,6 +73,7 @@ export const EachMention = styled.button<{ focus: boolean }>`
   & img {
     margin-right: 5px;
   }
+
   ${({ focus }) =>
     focus &&
     `
@@ -79,3 +81,30 @@ export const EachMention = styled.button<{ focus: boolean }>`
     color: white;
   `};
 `;
+
+// emotion에서는 변수를 담아서 사용할 수 있다.
+/*
+ ${({ focus }) =>
+    focus &&
+    `
+    background: #1264a3;
+    color: white;
+  `};
+
+처럼 focus가 true 인 상황에서 다음과 같은 CSS를 대입하도록 만들어준다.
+*/
+
+// emotion에서 함수호출하기
+/*
+함수는 호출하는 방법이 여러가지 있다.
+function a();
+a();  > 일반적인 함수 호출
+a``;  > 태그드 템플릿 리터럴 방식으로 함수 호출
+
+따라서 스타일드컴포넌트, emotion에서 
+
+export const EachMention = styled.button<{ focus: boolean }>`
+`;
+
+와 같은 방식으로 함수를 선언하고, 호출할 수 있는 것이다.
+*/
