@@ -5,12 +5,17 @@ import { ChatZone, Section, StickyHeader } from './styles';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 interface Props {
-  chatSections: { [key: string]: IDM[] };
+  chatSections: { [key: string]: (IDM | IChat)[] };
 }
 
 const ChatList: FC<Props> = ({ chatSections }) => {
   const scrollbarRef = useRef(null);
-  const onScroll = useCallback(() => {}, []);
+  const onScroll = useCallback((values) => {
+    // 스크롤이 가장위로 올라갔을 때
+    if (values.scrollTop === 0) {
+      console.log('가장위');
+    }
+  }, []);
 
   return (
     <ChatZone>

@@ -1,4 +1,4 @@
-import { IDM } from '@typings/db';
+import { IChat, IDM } from '@typings/db';
 import React, { FC, useMemo, memo } from 'react';
 import { ChatWrapper } from './styles';
 import gravatar from 'gravatar';
@@ -11,12 +11,12 @@ dayjs.locale('ko');
 dayjs.extend(advancedFormat);
 
 interface Props {
-  data: IDM;
+  data: IDM | IChat;
 }
 
 const Chat: FC<Props> = ({ data }) => {
   const { workspace } = useParams<{ workspace: string }>();
-  const user = data.Sender;
+  const user = 'Sender' in data ? data.Sender : data.User;
 
   // @[준희다](7)
   // \d 숫자 ? = 0개나 1개, * = 0개 이상, g = 모두 찾기
