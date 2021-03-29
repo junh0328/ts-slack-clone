@@ -1,25 +1,36 @@
 import Chat from '@components/Chat';
 import { IChat, IDM } from '@typings/db';
-import React, { FC, useCallback, useRef } from 'react';
+import React, { useCallback, forwardRef, MutableRefObject } from 'react';
 import { ChatZone, Section, StickyHeader } from './styles';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 interface Props {
   chatSections: { [key: string]: (IDM | IChat)[] };
+  setSize: (f: (size: number) => number) => Promise<IDM[][] | undefined>;
+  isEmpty: boolean;
+  isReachingEnd: boolean;
 }
 
-const ChatList: FC<Props> = ({ chatSections }) => {
-  const scrollbarRef = useRef(null);
-  const onScroll = useCallback((values) => {
-    // 스크롤이 가장위로 올라갔을 때
-    if (values.scrollTop === 0) {
-      console.log('가장위');
-    }
-  }, []);
+const ChatList = forwardRef<Scrollbars, Props>(({ chatSections, setSize, isReachingEnd }, scrollRef) => {
+  const onScroll = useCallback(
+    (values) => {
+      if (values.scrollTop === 0 && !isReachingEnd) {
+        console.log('가장 위');
+        setSize((prevSize) => prevSize + 1).then(() => {
+          // 스크롤 위치 유지
+          const current = (scrollRef as MutableRefObject<Scrollbars>)?.current;
+          if (current) {
+            current.scrollTop(current.getScrollHeight() - values.scrollHeight);
+          }
+        });
+      }
+    },
+    [scrollRef, isReachingEnd, setSize],
+  );
 
   return (
     <ChatZone>
-      <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
+      <Scrollbars autoHide ref={scrollRef} onScrollFrame={onScroll}>
         {/* 객체를 반복돌 때, Object.entries() */}
         {Object.entries(chatSections).map(([date, chats]) => {
           return (
@@ -36,6 +47,6 @@ const ChatList: FC<Props> = ({ chatSections }) => {
       </Scrollbars>
     </ChatZone>
   );
-};
+});
 
 export default ChatList;
