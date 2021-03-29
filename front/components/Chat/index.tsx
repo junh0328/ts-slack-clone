@@ -16,7 +16,11 @@ interface Props {
 
 const Chat: FC<Props> = ({ data }) => {
   const { workspace } = useParams<{ workspace: string }>();
+  // 타입스크립트가 IDM 인지 IChat 인지 확인할 수 있는 부분
+  // Sender는 IDM에만 들어있는데, data가 없을 경우 IChat,(channel)에서 쓴 것임을 알아서 감지한다.
   const user = 'Sender' in data ? data.Sender : data.User;
+  // for in 문을 참조해서 공부해볼 것, js의 유효한 문법임
+  // Sender 가 data 안에 있으면 data.Sender 아니라면 data.User
 
   // @[준희다](7)
   // \d 숫자 ? = 0개나 1개, * = 0개 이상, g = 모두 찾기
