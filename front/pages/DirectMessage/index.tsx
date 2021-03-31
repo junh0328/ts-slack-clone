@@ -1,5 +1,5 @@
-import { Container, Header } from '@pages/Channel/styles';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { Container, DragOver, Header } from '@pages/Channel/styles';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import gravatar from 'gravatar';
 import useSWR, { useSWRInfinite } from 'swr';
 import fetcher from '@utils/fetcher';
@@ -31,6 +31,7 @@ const DirectMessage = () => {
   const isReachingEnd = isEmpty || (chatData && chatData[chatData.length - 1]?.length < 20) || false;
   // isReachingEnd: 20개는 아니지만, 20개 보다 적어 추가적으로 데이터를 불러오지 않아도 될 경우
   const scrollbarRef = useRef<Scrollbars>(null);
+  const [dragOver, setDragOver] = useState(false);
 
   const onSubmitForm = useCallback(
     (e) => {
@@ -113,6 +114,45 @@ const DirectMessage = () => {
     }
   }, [chatData]);
 
+  // MDN drag and drop 내용 참조
+  const onDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      console.log(e);
+      const formData = new FormData();
+      if (e.dataTransfer.items) {
+        for (let i = 0; i < e.dataTransfer.items.length; i++) {
+          if (e.dataTransfer.items[i].kind === 'file') {
+            const file = e.dataTransfer.items[i].getAsFile();
+            console.log('...file[' + i + '].name = ' + file.name);
+            formData.append('image', file);
+          }
+        }
+      } else {
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+          console.log('...file[' + i + '].name = ' + e.dataTransfer.files[i].name);
+          formData.append('image', e.dataTransfer.files[i]);
+        }
+      }
+      axios
+        .post(`http://localhost:3095/api/workspaces/${workspace}/dms/${id}/images`, formData, {
+          withCredentials: true,
+        })
+        .then(() => {
+          setDragOver(false);
+          revalidate();
+        });
+    },
+    [revalidate, workspace, id],
+  );
+
+  // 드래그 하는 동안 DragOver 컴포넌트가 보여지게 하는 상태를 관리
+  const onDragOver = useCallback((e) => {
+    e.preventDefault();
+    console.log(e);
+    setDragOver(true);
+  }, []);
+
   if (!userData || !myData) {
     return <div>로딩중 ...</div>;
   }
@@ -121,7 +161,7 @@ const DirectMessage = () => {
   // 2차원 배열을 1차원 배열로 만들면서 reverse() 시킨다.
 
   return (
-    <Container>
+    <Container onDrop={onDrop} onDragOver={onDragOver}>
       <Header>
         <img src={gravatar.url(userData.email, { s: '24px', d: 'retro' })} alt={userData.nickname} />
         <span>{userData.nickname}</span>
@@ -134,6 +174,7 @@ const DirectMessage = () => {
         isReachingEnd={isReachingEnd}
       />
       <ChatBox chat={chat} onChangeChat={onChangeChat} onSubmitForm={onSubmitForm} />
+      {dragOver && <DragOver>업로드</DragOver>}
     </Container>
   );
 };
